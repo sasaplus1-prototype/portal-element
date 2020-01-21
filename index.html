@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Portal element</title>
+    <style>
+      body {
+        background-color: #999;
+        margin: 0;
+        padding: 0;
+      }
+
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+      }
+
+      portal {
+        cursor: pointer;
+        outline: none;
+        z-index: 9999;
+      }
+
+      .thumbnail {
+        height: 100vh;
+        position: fixed;
+        right: 8px;
+        top: 8px;
+        transform-origin: top right;
+        transform: scale(0.2);
+        width: 100vw;
+        will-change: top, right, transform;
+      }
+    </style>
+  </head>
+  <body>
+    <ul>
+      <li><button id="js-slide-in" type="button">slide-in</button></li>
+      <li><button id="js-fade-in" type="button">fade-in</button></li>
+    </ul>
+    <portal id="js-thumbnail" class="thumbnail" src="thumbnail.html"></portal>
+    <script>
+      (function(){
+
+        'use strict';
+
+        if (!('HTMLPortalElement' in window)) {
+          return;
+        }
+
+        document.getElementById('js-slide-in').addEventListener('click', function() {
+          const portal = document.createElement('portal');
+
+          portal.style = `
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 9999;
+            will-change: transform;
+          `;
+          portal.src = 'slide-in.html';
+
+          document.body.appendChild(portal);
+
+          const anime = portal.animate({
+            transform: [
+              'translateX(100%)',
+              'translateX(0)'
+            ]
+          }, {
+            duration: 600,
+            easing: 'ease-in-out',
+            fill: 'forwards'
+          });
+
+          anime.onfinish = () => portal.activate();
+        });
+
+        document.getElementById('js-fade-in').addEventListener('click', function() {
+          const portal = document.createElement('portal');
+
+          portal.style = `
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 9999;
+            will-change: opacity;
+          `;
+          portal.src = 'fade-in.html';
+
+          document.body.appendChild(portal);
+
+          const anime = portal.animate({
+            opacity: [0, 1]
+          }, {
+            duration: 600,
+            easing: 'ease-in-out',
+            fill: 'forwards'
+          });
+
+          anime.onfinish = () => portal.activate();
+        });
+
+        document.getElementById('js-thumbnail').addEventListener('click', function() {
+          const anime = this.animate({
+            top: ['8px', '0px'],
+            right: ['8px', '0px'],
+            transform: ['scale(0.2)', 'scale(1)']
+          }, {
+            duration: 600,
+            easing: 'ease-in-out',
+            fill: 'forwards'
+          });
+
+          anime.onfinish = () => this.activate();
+        });
+
+      }());
+    </script>
+  </body>
+</html>

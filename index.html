@@ -66,21 +66,22 @@
             will-change: transform;
           `;
           portal.src = 'slide-in.html';
+          portal.addEventListener('load', () => {
+            const anime = portal.animate({
+              transform: [
+                'translateX(100%)',
+                'translateX(0)'
+              ]
+            }, {
+              duration: 600,
+              easing: 'ease-in-out',
+              fill: 'forwards'
+            });
 
-          document.body.appendChild(portal);
-
-          const anime = portal.animate({
-            transform: [
-              'translateX(100%)',
-              'translateX(0)'
-            ]
-          }, {
-            duration: 600,
-            easing: 'ease-in-out',
-            fill: 'forwards'
+            anime.onfinish = () => portal.activate();
           });
 
-          anime.onfinish = () => portal.activate();
+          document.body.appendChild(portal);
         });
 
         document.getElementById('js-fade-in').addEventListener('click', function() {
@@ -96,18 +97,19 @@
             will-change: opacity;
           `;
           portal.src = 'fade-in.html';
+          portal.addEventListener('load', () => {
+            const anime = portal.animate({
+              opacity: [0, 1]
+            }, {
+              duration: 600,
+              easing: 'ease-in-out',
+              fill: 'forwards'
+            });
 
-          document.body.appendChild(portal);
-
-          const anime = portal.animate({
-            opacity: [0, 1]
-          }, {
-            duration: 600,
-            easing: 'ease-in-out',
-            fill: 'forwards'
+            anime.onfinish = () => portal.activate();
           });
 
-          anime.onfinish = () => portal.activate();
+          document.body.appendChild(portal);
         });
 
         document.getElementById('js-thumbnail').addEventListener('click', function() {
